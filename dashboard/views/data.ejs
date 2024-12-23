@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sensors Data</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <style>
+    /* Ensure the body and html take full height */
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    /* Top Navbar */
+    .navbar {
+      position: fixed;
+      background-color: #003366;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    /* Left Sidebar */
+
+    .sidebar {
+    top:56px;    
+    height: calc(100% - 56px); /* Full height */
+    width: 200px;
+    position: fixed; /* Fixed sidebar */
+    left: 0;
+    padding-top: 40px;
+    border-right: 1px solid #ddd;
+
+    background-color: #a3a4a5; /* Professional dark color */
+    color: #ECF0F1; /* Light text */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    overflow-y: auto;
+
+    }
+
+    .sidebar h5 {
+    font-weight: bold;
+    }
+
+    .sidebar .nav-link {
+    color: #ECF0F1; /* Default light color */
+    font-size: 16px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: all 0.3s ease; /* Smooth hover effect */
+    }
+
+    .sidebar .nav-link:hover {
+    background-color: #34495E; /* Highlight on hover */
+    color: #1ABC9C; /* Accent green */
+    text-decoration: none;
+    }
+
+    .sidebar .nav-link.active {
+    background-color: #1ABC9C; /* Active link */
+    color: #FFFFFF; /* White text */
+    }
+
+    .sidebar .nav-link i {
+    font-size: 18px; /* Icon size */
+    }
+
+    /* Main Content Area */
+    .content {
+      margin-top: 56px; /* Height of the navbar */
+      margin-left: 200px; /* Width of the sidebar */
+      padding: 20px;
+      height: calc(100% - 56px);
+      overflow-y: auto; /* Enable scrolling */
+      background-color: #ededed;
+    }
+
+    /* table */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fc;
+      padding-top: 30px;
+    }
+
+    h2 {
+      color: #333;
+      font-weight: bold;
+    }
+
+    .table-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .table th {
+      background-color: #003366; /* Couleur de fond */
+      color: #ffffff;           /* Couleur du texte */
+      font-weight: bold;        /* Texte en gras */
+      text-transform: uppercase; /* Texte en majuscule */
+      padding: 15px;            /* Espacement intérieur */
+      border: 2px solid #ddd;   /* Bordure */
+      
+    }
+    .table th:hover {
+      background-color: #0056b3; /* Couleur de fond au survol */
+      color: #fff;               /* Couleur du texte au survol */
+      cursor: pointer;           /* Curseur qui indique un élément interactif */
+      transition: background-color 0.3s ease; /* Animation fluide */
+    }
+    .table thead {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    .table th, .table td {
+      text-align: center;
+      vertical-align: middle;
+      padding: 12px;
+      border: 1px solid #ddd;
+    }
+
+    .table tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .table tbody tr:hover {
+      background-color: #f1f1f1;
+      cursor: pointer;
+    }
+
+    .table td {
+      font-size: 14px;
+    }
+
+    /* Styling for the timestamp column */
+    .timestamp-column {
+      font-weight: bold;
+      color: #444;
+    }
+
+    /* Center content within the page */
+    .container {
+      max-width: 1200px;
+    }
+
+    /* Responsive styles for small screens */
+    @media (max-width: 768px) {
+      .table {
+        font-size: 12px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Chemical LAB</a>
+      <div class="collapse navbar-collapse justify-content-end">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/account">Account</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<!-- Left Sidebar -->
+<div class="sidebar bg-dark text-light">
+    <h5 class="text-center py-3 border-bottom">Menu</h5>
+    <ul class="nav flex-column px-2">
+      <li class="nav-item my-2">
+        <a class="nav-link text-light d-flex align-items-center" href="/dashboard">
+          <i class="bi bi-speedometer2 me-2"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item my-2">
+        <a class="nav-link active text-light d-flex align-items-center" href="">
+          <i class="bi bi-gear-fill me-2"></i> Sensors DATA
+        </a>
+      </li>
+      <li class="nav-item my-2">
+        <a class="nav-link text-light d-flex align-items-center" href="/report">
+          <i class="bi bi-bar-chart-fill me-2"></i> Reports
+        </a>
+      </li>
+      <li class="nav-item my-2">
+        <a class="nav-link text-light d-flex align-items-center" href="/help">
+          <i class="bi bi-question-circle-fill me-2"></i> Help
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- Main Content Area -->
+  <div class="content">
+    <h2 class="text-center mb-4">Captured Data</h2>
+    <!-- Captured Data Table -->
+    <div class="table-container">
+        <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th onclick="sortTable(0)">Timestamp</th> <!-- Added sorting functionality -->
+              <th onclick="sortTable(1)">Temperature (°C)</th> <!-- Added sorting functionality -->
+              <th onclick="sortTable(2)">Humidity (%)</th> <!-- Added sorting functionality -->
+              <th onclick="sortTable(3)">Pressure (hPa)</th> <!-- Added sorting functionality -->
+              <th onclick="sortTable(4)">Flame Status</th> <!-- Added sorting functionality -->
+              <th onclick="sortTable(5)">Flame Analog</th> <!-- Added sorting functionality -->
+              <th onclick="sortTable(6)">MQ5 Value</th> <!-- Added sorting functionality -->
+              <th onclick="sortTable(7)">Distance (cm)</th> <!-- Added sorting functionality -->
+            </tr>
+            </thead>
+            <tbody id="capturedDataTableBody">
+            <!-- Data rows will be populated here -->
+            </tbody>
+        </table>
+        </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Fetch data from the backend
+    async function fetchData() {
+    try {
+        const response = await fetch('http://localhost:3000/sensorsData'); // Assurez-vous que votre API fonctionne ici
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        alert('Erreur lors de la récupération des données:', error);
+        console.error('Erreur lors de la récupération des données:', error);
+        return [];
+    }
+    }
+
+    // Populate the table with the fetched data
+    async function populateCapturedDataTable() {
+    const data = await fetchData();
+
+    if (data.length === 0) {
+        alert("Aucune donnée disponible.");
+        console.warn("Aucune donnée disponible.");
+        return;
+    }
+
+    const tableBody = document.getElementById('capturedDataTableBody');
+
+    // Loop through the fetched data and create table rows
+    data.forEach(entry => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+        <td>${new Date(entry.timestamp).toLocaleString()}</td>
+        <td>${entry.bme.temperature}</td>
+        <td>${entry.bme.humidity}</td>
+        <td>${entry.bme.pressure}</td>
+        <td>${entry.flame.status === 1 ? 'Detected' : 'Not Detected'}</td>
+        <td>${entry.flame.analog}</td>
+        <td>${entry.mq5.value}</td>
+        <td>${entry.ultrasonic.distance}</td>
+        `;
+
+        tableBody.appendChild(row);
+    });
+    }
+
+// Sorting functionality
+function sortTable(columnIndex) {
+      const table = document.querySelector('.table');
+      const rows = Array.from(table.tBodies[0].rows);
+
+      const isAscending = table.getAttribute('data-sort-order') === 'asc';
+      table.setAttribute('data-sort-order', isAscending ? 'desc' : 'asc');
+
+      const sortedRows = rows.sort((a, b) => {
+        const aText = a.cells[columnIndex].innerText;
+        const bText = b.cells[columnIndex].innerText;
+
+        if (!isNaN(aText) && !isNaN(bText)) {
+          return isAscending
+            ? aText - bText
+            : bText - aText;
+        }
+
+        return isAscending
+          ? aText.localeCompare(bText)
+          : bText.localeCompare(aText);
+      });
+
+      sortedRows.forEach(row => table.tBodies[0].appendChild(row));
+    }
+
+
+    // Initialize table
+    populateCapturedDataTable();
+  </script>
+ 
+  
+
+</body>
+</html>

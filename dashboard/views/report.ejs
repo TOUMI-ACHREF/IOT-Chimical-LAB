@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sensors Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <style>
+    /* Ensure the body and html take full height */
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    /* Top Navbar */
+    .navbar {
+      position: fixed;
+      background-color: #003366;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    /* Left Sidebar */
+
+    .sidebar {
+    top:56px;    
+    height: calc(100% - 56px); /* Full height */
+    width: 200px;
+    position: fixed; /* Fixed sidebar */
+    left: 0;
+    padding-top: 40px;
+    border-right: 1px solid #ddd;
+
+    background-color: #a3a4a5; /* Professional dark color */
+    color: #ECF0F1; /* Light text */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    overflow-y: auto;
+
+    }
+
+    .sidebar h5 {
+    font-weight: bold;
+    }
+
+    .sidebar .nav-link {
+    color: #ECF0F1; /* Default light color */
+    font-size: 16px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: all 0.3s ease; /* Smooth hover effect */
+    }
+
+    .sidebar .nav-link:hover {
+    background-color: #34495E; /* Highlight on hover */
+    color: #1ABC9C; /* Accent green */
+    text-decoration: none;
+    }
+
+    .sidebar .nav-link.active {
+    background-color: #1ABC9C; /* Active link */
+    color: #FFFFFF; /* White text */
+    }
+
+    .sidebar .nav-link i {
+    font-size: 18px; /* Icon size */
+    }
+
+    /* Main Content Area */
+    .content {
+      margin-top: 56px; /* Height of the navbar */
+      margin-left: 200px; /* Width of the sidebar */
+      padding: 20px;
+      height: calc(100% - 56px);
+      overflow-y: auto; /* Enable scrolling */
+      background-color: #ededed;
+    }
+    .container {
+      margin-top: 30px;
+    }
+    table {
+      margin-top: 20px;
+    }
+    .loading {
+      text-align: center;
+      font-size: 1.5em;
+      color: gray;
+    }
+
+    /* Filter Container Styling */
+    .filter-container {
+      position: absolute;
+      margin-top: 45px;
+      top: 10px;
+      right: 20px;
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+
+    .filter-container label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .filter-container input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    #tri:hover{
+      background-color: #47494a; /* Couleur de fond au survol */
+      color: #e3e3de;               /* Couleur du texte au survol */
+      cursor: pointer;           /* Curseur qui indique un élément interactif */
+      transition: background-color 0.3s ease; /* Animation fluide */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Chemical LAB</a>
+      <div class="collapse navbar-collapse justify-content-end">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link"  href="/account">Account</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<!-- Left Sidebar -->
+<div class="sidebar bg-dark text-light">
+    <h5 class="text-center py-3 border-bottom">Menu</h5>
+    <ul class="nav flex-column px-2">
+      <li class="nav-item my-2">
+        <a class="nav-link text-light d-flex align-items-center" href="/dashboard">
+          <i class="bi bi-speedometer2 me-2"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item my-2">
+        <a class="nav-link text-light d-flex align-items-center" href="/data">
+          <i class="bi bi-gear-fill me-2"></i> Sensors DATA
+        </a>
+      </li>
+      <li class="nav-item my-2">
+        <a class="nav-link active text-light d-flex align-items-center" href="">
+          <i class="bi bi-bar-chart-fill me-2"></i> Reports
+        </a>
+      </li>
+      <li class="nav-item my-2">
+        <a class="nav-link text-light d-flex align-items-center" href="/help">
+          <i class="bi bi-question-circle-fill me-2"></i> Help
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- Main Content Area -->
+  <div class="content">
+   <!-- Filter Container -->
+    <div class="filter-container" style="position: absolute; top: 10px; right: 10px;">
+      <label for="alertTypeFilter">Filter by Type:</label>
+      <select id="alertTypeFilter" class="form-select">
+        <option value="All" selected>All</option>
+        <option value="Distance critique">Distance critique</option>
+        <option value="Gaz dangereux">Gaz dangereux</option>
+        <option value="Feu détecté">Feu détecté</option>
+      </select>
+    </div>
+
+    <div class="container">
+        <h1 class="text-center">Alert Reports</h1>
+    <div id="loading" class="loading">Loading alerts...</div>
+    <table id="alertTable" class="table table-striped table-bordered d-none">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Type</th>
+          <th>Message</th>
+          <th onclick="sortTable(3)" id="tri">Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Alert rows will be injected here -->
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+ 
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+    // Fetch and display alerts on page load
+    const alerts = await fetchAlerts();
+    renderAlerts(alerts);
+
+    // Handle filter select change
+    const filterSelect = document.getElementById('alertTypeFilter');
+    
+    filterSelect.addEventListener('change', () => {
+      const selectedType = filterSelect.value;
+
+      if (selectedType === 'All') {
+        // If "All" is selected, show all alerts
+        renderAlerts(currentAlerts); // Reset to show all alerts
+      } else {
+        // Filter alerts based on the selected type
+        const filteredAlerts = currentAlerts.filter((alert) => alert.type === selectedType);
+        renderAlerts(filteredAlerts);
+      }
+    });
+  });
+
+  // Global to store alerts
+  let currentAlerts = [];
+
+  // Fetch alerts from the server
+  async function fetchAlerts() {
+    try {
+      const response = await fetch('/api/alerts');
+      if (!response.ok) {
+        throw new Error('Failed to fetch alerts');
+      }
+      const alerts = await response.json();
+      currentAlerts = alerts; // Store the alerts globally
+      return alerts;
+    } catch (error) {
+      console.error('Error fetching alerts:', error);
+      alert('Failed to fetch alerts. Please try again later.');
+      return [];
+    }
+  }
+
+  // Render alerts based on filters
+  function renderAlerts(alerts) {
+    const table = document.getElementById('alertTable');
+    const tbody = table.querySelector('tbody');
+    const loading = document.getElementById('loading');
+
+    tbody.innerHTML = ''; // Clear previous alerts
+
+    if (alerts.length === 0) {
+      loading.textContent = 'No alerts found.';
+      return;
+    }
+
+    loading.classList.add('d-none');
+    table.classList.remove('d-none');
+
+    alerts.forEach((alert, index) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${alert.type}</td>
+        <td>${alert.message}</td>
+        <td>${new Date(alert.timestamp).toLocaleString()}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+
+  // Socket.IO real-time handling
+  const socket = io();
+
+  // Receive and display alerts in real-time
+  socket.on('alert', (alert) => {
+    // Log the alert and display it in the table
+    console.log('Real-time alert received:', alert);
+    currentAlerts.unshift(alert); // Add the new alert to the beginning of the array
+    // Apply the current filter to decide if this alert should be displayed
+    const filterSelect = document.getElementById('alertTypeFilter');
+    const selectedType = filterSelect.value;
+
+    if (selectedType === 'All' || selectedType === alert.type) {
+      renderAlerts(currentAlerts); // Re-render the table with the new alert
+    }
+  });
+  // Sorting functionality
+  function sortTable(columnIndex) {
+      const table = document.querySelector('.table');
+      const rows = Array.from(table.tBodies[0].rows);
+
+      const isAscending = table.getAttribute('data-sort-order') === 'asc';
+      table.setAttribute('data-sort-order', isAscending ? 'desc' : 'asc');
+
+      const sortedRows = rows.sort((a, b) => {
+        const aText = a.cells[columnIndex].innerText;
+        const bText = b.cells[columnIndex].innerText;
+
+        if (!isNaN(aText) && !isNaN(bText)) {
+          return isAscending
+            ? aText - bText
+            : bText - aText;
+        }
+
+        return isAscending
+          ? aText.localeCompare(bText)
+          : bText.localeCompare(aText);
+      });
+
+      sortedRows.forEach(row => table.tBodies[0].appendChild(row));
+    }
+
+  </script>
+
+</body>
+</html>
