@@ -2,7 +2,6 @@
 
 ![Project Status](https://img.shields.io/badge/Status-Completed-brightgreen)  
 ![IoT](https://img.shields.io/badge/Category-IoT-blue)  
-![License](https://img.shields.io/badge/License-MIT-yellow)
 
 ## **🔓 Overview**  
 **Chimical LAB** is an IoT project designed to enhance laboratory safety by monitoring critical environmental parameters. This system uses multiple sensors to detect:  
